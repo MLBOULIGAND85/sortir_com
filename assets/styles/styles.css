@@ -1,0 +1,566 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: radial-gradient(circle at center, #d96b10, #763e09);
+    color: #ffffff;
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    text-shadow: 2px 2px #000;
+    text-transform: uppercase;
+    animation: glitch 3s infinite;
+}
+
+header img.title {
+    width: 100%;
+    height: auto;
+    max-height: 200px; /* limite la hauteur sur grand écran */
+    object-fit: cover; /* garde le ratio, recadre si nécessaire */
+}
+
+/* Sur petit écran on autorise plus de hauteur */
+@media (max-width: 2000px) {
+    header img.title {
+        max-height: 900px;
+    }
+}
+
+@media (max-width: 768px) {
+    .create-event {
+        display: none;
+    }
+
+}
+
+/* Footer - data neon */
+footer {
+    text-align: center;
+    padding: 1em;
+    color: rgba(0, 0, 0, 0.8);
+    font-size: 0.9rem;
+    border-top: 2px solid #000000;
+    box-shadow: 0 -2px 10px #000000;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+/* Main - ambiance laboratoire secret */
+main {
+    flex: 1;
+    padding: 2rem;
+}
+
+/*---------------------------------------------------------------------------------------*/
+
+nav {
+    background-color: #763e09; /* Couleur de fond */
+    padding: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-evenly;
+
+    gap: 2rem;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Conteneur du formulaire */
+form {
+    background: rgba(0, 0, 0, 0.5); /* même overlay sombre que .card */
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+/* Labels et texte */
+form label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: bold;
+    color: #ffd27f; /* jaune chaud */
+    text-shadow: 1px 1px #000;
+}
+
+/* Champs de saisie */
+form input, form select, form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ffd27f;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1rem;
+}
+
+form input::placeholder, form textarea::placeholder {
+    color: #eee;
+}
+
+/* Focus sur les champs */
+form input:focus, form select:focus, form textarea:focus {
+    outline: none;
+    border-color: #ffd27f;
+    box-shadow: 0 0 5px #ffd27f;
+}
+
+/* Boutons */
+form .btn {
+    background: #ffd27f; /* même jaune chaud */
+    color: #000;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+form .btn:hover {
+    background: #e6b75f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.remember-me {
+    display: inline-flex; /* met texte et checkbox sur la même ligne */
+    align-items: center; /* centre verticalement la case par rapport au texte */
+    gap: 4px; /* espace entre checkbox et texte */
+    white-space: nowrap; /* texte sur une seule ligne */
+}
+
+.remember-me input {
+    vertical-align: middle; /* renforce l’alignement vertical avec le texte */
+    margin-top: 1rem;
+    margin-left: 1rem;
+}
+
+.etat {
+    color: #ffd27f;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 1.5rem;
+    text-shadow: 2px 2px #000;
+}
+
+/* Centrer le bouton */
+.btn-position {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.btn a {
+    color: inherit; /* garde la couleur du bouton */
+    text-decoration: none; /* supprime le soulignement */
+    display: block;
+}
+
+/* Boutons  administrateur : hors formulaire*/
+.btn-option {
+    background: #ffd27f; /* même jaune chaud */
+    color: #000;
+    margin: 0.5em;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+ .btn-option:hover {
+    background: #e6b75f;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Animations */
+
+@keyframes flicker {
+    0%, 100% {opacity: 1;}
+    40% {opacity: 0.9;}
+    45% {opacity: 0.4;}
+    50% {opacity: 0.7;}
+    55% {opacity: 0.3;}
+    60% {opacity: 0.9;}
+    70% {opacity: 1;}
+}
+
+@keyframes shake {
+    0%, 100% {transform: translate(0);}
+    25% {transform: translate(-1px, 1px);}
+    50% {transform: translate(2px, -1px);}
+    75% {transform: translate(-2px, 2px);}
+}
+
+@keyframes glitch {
+    0% {transform: none;}
+    20% {transform: skew(0.5deg, 0.5deg);}
+    40% {transform: translate(-2px, 2px) skew(-0.5deg, -0.5deg);}
+    60% {transform: translate(2px, -2px);}
+    80% {transform: none;}
+    100% {transform: translate(-1px, 1px);}
+}
+
+/* -----------------------------------------------------------------------------*/
+
+
+/* Container principal */
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* deux colonnes */
+    gap: 1rem 3rem; /* espace vertical et horizontal */
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+
+    /* fond du site + overlay translucide */
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #fff;
+}
+
+/* Chaque ligne (field) */
+.field {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+    padding: 0.5rem 0;
+}
+
+/* Labels (à gauche) */
+.field label {
+    font-weight: bold;
+    color: #ffd27f; /* jaune chaud pour contraster avec le fond */
+    margin-right: 1rem;
+    flex: 1;
+}
+
+/* Valeurs (à droite) */
+.field span {
+    flex: 1;
+    text-align: left;
+    color: #fff;
+}
+
+/* Titre principal */
+h1 {
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 2px 2px #000;
+    letter-spacing: 2px;
+}
+
+.annulee {
+    color: darkred;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr; /* une seule colonne */
+    }
+
+    .field {
+        flex-direction: column;
+        border-bottom: none;
+        padding: 0.8rem 0;
+    }
+
+    .field label {
+        margin-bottom: 0.3rem;
+    }
+}
+
+/* ------------------------------------------------------------------------*/
+
+/* Section qui contient toutes les sorties */
+.sortie-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* grilles flexibles */
+    gap: 1.5rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.sortie-list a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+.sortie-list a:hover {
+    text-decoration: none;
+}
+
+.sortie-list a:hover {
+    text-decoration: none;
+}
+
+/* Carte individuelle */
+.card {
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+
+}
+
+/* Effet au survol */
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.card-profil {
+    background: rgba(0, 0, 0, 0.5); /* overlay sombre */
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    margin-bottom: 1rem;
+}
+/* Effet au survol */
+
+.card-profil:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+
+/* Titre de la sortie */
+.card h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.8rem;
+    color: #ffd27f; /* jaune chaud comme les labels */
+    text-shadow: 1px 1px #000;
+}
+
+/* Infos dans la carte */
+.card span {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: #eee;
+}
+
+.card span.etatlist {
+    color: #ffd27f;
+    font-family: Arial, sans-serif;
+    text-shadow: 1px 1px #000;
+}
+
+.card span.passee {
+    color: darkgrey;
+    font-family: Arial, sans-serif;
+    text-shadow: 1px 1px #000;
+}
+
+
+
+/* Titres principaux */
+h2, h3 {
+    text-align: center;
+    color: #fff;
+    margin-top: 1.5rem;
+    text-shadow: 2px 2px #000;
+}
+
+/* Responsive mobile */
+@media (max-width: 600px) {
+    .sortie-list {
+        grid-template-columns: 1fr; /* 1 carte par ligne */
+    }
+
+    .card {
+        padding: 1rem;
+    }
+
+    .card h4 {
+        font-size: 1.1rem;
+    }
+}
+ /* ----------------------------------------- */
+
+.participants-section {
+    margin-top: 15px;
+    font-family: Arial, sans-serif;
+}
+
+/* Conteneur avec scroll */
+.table-container {
+    max-height: 120px;  /* Hauteur fixe */
+    overflow-y: auto;   /* Barre de défilement verticale */
+    border: 2px solid #000;
+    border-radius: 5px;
+    width: 320px;       /* Largeur fixe */
+}
+
+/* Table */
+.participants-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Entête du tableau */
+.participants-table th {
+    position: sticky;   /* Entête fixe */
+    top: 0;
+    background-color: #763e09;
+    padding: 6px;
+    border-bottom: 2px solid #000;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* Cellules */
+.participants-table td {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Ligne sur deux pour améliorer la lisibilité */
+.participants-table tr:nth-child(even) {
+    background-color: #763e09;
+}
+
+/* Ligne vide quand pas de participants */
+.participants-table .empty {
+    text-align: center;
+    font-style: italic;
+    color: #000000;
+}
+.participants-table th:first-child,
+.participants-table td:first-child {
+    border-right: 2px solid #000; /* Bordure verticale noire */
+}
+
+/* Facultatif : améliore un peu le rendu */
+.participants-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.participants-table th,
+.participants-table td {
+    padding: 6px;
+}
+
+.participants-table a {
+    text-decoration: none; /* supprime le soulignement */
+    display: block;
+    color:#ffd27f;
+    //color: #0b5edb;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    width: 100%;
+}
+.action_impossible {
+    color: #000000;
+    background-color: darkgrey;
+    opacity: 0.5;
+}
+
+.message {
+    margin: 5em;
+    width: 70%;
+}
+
+.reset-pwd a{
+    color: inherit; /* garde la couleur du bouton */
+    text-decoration: none; /* supprime le soulignement */
+    display: block;
+}
+
+.reset-pwd a:hover {
+    color: black;
+}
+
+.imgProfil {
+    text-align: center;
+}
+
+select {
+    background-color: #391e04;
+    color: white;
+}
+
+select option {
+    background-color: #391e04;
+    color: white;
+}
+
+section a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+section a:hover {
+    text-decoration: underline;
+}
+
+.btn-position-detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffd27f;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+
+    font-weight: bold;
+    font-family: monospace;
+    width: 200px; /* ou 100% selon besoin */
+    text-align: center;
+    margin: 10px auto;
+    transition: background 0.2s ease;
+}
+.btn-position-detail a{
+    color: #000000;
+}
+
+.btn-position-detail:hover {
+    background: #ffbe40;
+}

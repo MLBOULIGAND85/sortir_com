@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="../../assets/css/style.css">
+{% endblock %}
+
+{% block body %}
+
+    <h1>GESTION DES UTILISATEURS</h1>
+
+    <section class="participants-section">
+        <legend>👉 Liste des utilisateurs 👥 :</legend>
+        <div class="table-responsive">
+            <table class="participants-table">
+                <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Nom - Prénom</th>
+                    <th>Campus</th>
+                    <th>Etat</th>
+                    <th>Actions : 🔓 - 🔒</th>
+                    <th>Supprimer ❌</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.pseudo }}</td>
+                        <td><a href="{{ path('app_user', {id: user.id}) }}">{{ user.nom }}  {{ user.prenom }}</a></td>
+                        <td>{{ user.campus.nom }}</td>
+                        <td>{{ user.actif ? '🔓 actif' : '🔒 inactif' }} </td>
+
+                        {% if 'ROLE_ADMIN' not in user.roles %}
+                            <td>
+                                <a href="{{ path('admin_user_gestion', {id: user.id}) }}">
+                                    {{ user.actif ? '🔒 Désactiver' : '🔓 Activer' }}
+                                </a>
+                            </td>
+                        {% else %}
+                            <td class="action_impossible">⛔ <em>(admin)</em></td>
+                        {% endif %}
+
+                        {% if 'ROLE_ADMIN' not in user.roles %}
+                            <td>
+                                <a href="{{ path('admin_user_delete', {id: user.id, token : csrf_token('delete' ~ user.id)}) }}"
+                                   class="" onclick="return confirm('⚠ L\'utilisateur sera supprimé définitivement, continuer?')">
+                                    ❌Supprimer
+                                </a>
+                            </td>
+                        {% else %}
+                            <td class="action_impossible">⛔ <em>(admin)</em></td>
+                        {% endif%}
+
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="empty">Aucun utilisateur inscrit</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section class="">
+        {# {% if is_granted('IS_AUTHENTICATED') and is_granted('ROLE_ADMIN') %}  #}
+        <div class="btn-position">
+            <button type="button" class="btn btn-option"> <a href="{{ path('app_register') }}"> <strong> CREER UN PROFIL UTILISATEUR </strong> </a> </button>
+        </div>
+
+        <div class="csv">
+            <h5>Import CSV d'utilisateurs :</h5>
+            <form action="{{ path('admin_user_userlist') }}" method="post" enctype="multipart/form-data">
+                <label for="listusers"></label>
+                <input type="file" name="listusers" id="listusers">
+                <input type="submit">
+            </form>
+        </div>
+
+        {# {% endif %} #}
+    </section>
+
+{% endblock %}

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Sortie{% endblock %}</title>
+
+        <link rel="icon" href="{{ asset('images/favicon.png') }}">
+
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body>
+        <header>
+
+            <img class="title" src="{{ asset('images/logoV3b.png') }}" alt="logo Sortie">
+
+
+            <nav>
+                <ul class="nav-links" id="navLinks">
+
+                    <li><a href="{{ path('main') }}">Accueil</a></li>
+
+                    {% if is_granted('IS_AUTHENTICATED') and is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path('app_user', { id : app.user.id }) }}">Profil Administrateur</a></li>
+                    {% elseif is_granted('IS_AUTHENTICATED') and is_granted('ROLE_USER') %}
+                        <li><a href="{{ path('app_user', { id : app.user.id }) }}">Profil Utilisateur</a></li>
+                    {%  endif %}
+
+
+
+                    <li><a href="{{ path('sortie_list') }}">Evènements</a></li>
+
+
+                     {% if (not is_granted('IS_AUTHENTICATED')) %}
+                     <li><a href="{{ path('app_register') }}">Inscription</a></li>
+                     <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                     {% elseif not is_mobile() %}
+                     <li class="create-event"><a href="{{ path('sortie_creation') }}">Créer un évènement</a></li>
+                     <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                     {% endif %}
+
+                </ul>
+            </nav>
+
+            <!-- affichage des messages flashes -->
+            {% for type, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ type }} message">
+                        {{ message|raw }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+        </header>
+        <main>
+            {% block body %}
+
+            {% endblock %}
+        </main>
+        <footer class="text-center">
+            {% block footer %}
+            <p>©Sortir-com {{ "now" | date("Y") }}</p>
+            {% endblock %}
+        </footer>
+    </body>
+</html>

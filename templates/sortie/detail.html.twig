@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}{{ parent() }} - Liste{% endblock %}
+
+{% block body %}
+
+    {% if sortie.etat != 'ANNULEE' %}
+        <h1>Afficher une sortie</h1>
+
+        <h5 class="etat"> 👉 SORTIE {{ sortie.etat }} 📆</h5>
+
+        <div class="container">
+            <div class="field"><label>Nom de la sortie:</label> <span>{{ sortie.nom }}</span></div>
+            <div class="field"><label>Campus :</label> <span>{{ sortie.site.nom }}</span></div>
+
+            <div class="field"><label> Organisateur :</label> <span>{{ sortie.organisateur.nom }}</span></div>
+
+            <div class="field"><label>Date et heure de la sortie:</label> <span>{{ sortie.dateHeureDebut|date('d/m/Y H:i') }}</span></div>
+            <div class="field"><label>Lieu:</label> <span>{{ sortie.lieu.nom }}</span></div>
+
+            <div class="field"><label>Date limite d'inscription:</label> <span>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</span></div>
+            <div class="field"><label>Rue:</label> <span>{{ sortie.lieu.rue }}</span></div>
+
+            <div class="field"><label>Nombre de places:</label> <span>{{ sortie.nbInscriptionMax }}</span></div>
+            <div class="field"><label>Code postal:</label> <span>{{ sortie.lieu.ville.codePostal }}</span></div>
+
+            <div class="field"><label>Nombre de places restantes:</label> <span>{{ placeRestante }}</span></div>
+
+            <div class="field"><label>Date de Fin:</label> <span>{{ sortie.DateHeureFin|date('d/m/Y H:i') }}</span></div>
+            <div class="field"><label>Description et infos:</label> <span>{{ sortie.infoSortie }}</span></div>
+
+            <div class="field"><label>Latitude:</label> <span>{{ sortie.lieu.latitude }}</span></div>
+            <div class="field"><label>Longitude:</label> <span>{{ sortie.lieu.longitude }}</span></div>
+        </div>
+    {% endif %}
+
+    {% if sortie.etat == "ANNULEE" %}
+        <h1 class="annulee">❌ SORTIE ANNULEE</h1>
+        <div class="container">
+            <div class="field"><label>Raison :</label> <span>{{ sortie.infoSortie }}</span></div>
+        </div>
+    {% endif %}
+
+<div class="btn-position">
+        {% if app.user not in sortie.users and sortie.dateLimiteInscription > "now" and sortie.etat == "OUVERTE" %}
+            <button type="button" class="btn btn-option">
+                <a href="{{ path('sortie_inscription',{id: sortie.id}) }}">S'inscrire</a>
+            </button>
+        {% endif %}
+
+        {% if app.user in sortie.users and (sortie.etat == "OUVERTE" or (sortie.dateLimiteInscription > "now" and sortie.etat == "CLOTUREE"))%}
+            <button type="button" class="btn btn-option">
+                <a href="{{ path('sortie_deinscription',{id: sortie.id}) }}">Se désinscrire</a>
+            </button>
+        {% endif %}
+
+        {% if app.user.id == sortie.organisateur.id or is_granted('ROLE_ADMIN') and (sortie.etat == "OUVERTE" or sortie.etat == "CLOTUREE")%}
+            <button type="button" class="btn btn-option">
+                <a href="{{ path('sortie_update',{id: sortie.id}) }}">Modifier</a>
+            </button>
+            {% if sortie.etat != "ANNULEE" %}
+                <button type="button" class="btn btn-option">
+                    <a href="{{ path('sortie_annulation',{id: sortie.id}) }}" onclick="return confirm('⚠ La sortie sera supprimée définitivement, continuer?')">ANNULER</a>
+                </button>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <section class="participants-section">
+        <legend>👉 Liste des participants :</legend>
+        <div class="table-container">
+            <table class="participants-table">
+                <thead>
+                <tr>
+                    <th>Pseudo</th>
+                    <th>Nom - Prénom</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in sortie.users %}
+                    <tr>
+                        <td>{{ user.pseudo }}</td>
+                        <td><a href="{{ path('app_user', {id: user.id}) }}">{{ user.nom }}  {{ user.prenom }}</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="2" class="empty">Aucun participant inscrit</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+{% endblock %}
